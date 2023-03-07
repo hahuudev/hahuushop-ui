@@ -1,0 +1,27 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 62.5%;
+    line-height: 1.65;
+}
+
+body {
+    font-size: 1.4rem;
+
+    a {
+        text-decoration: none;
+    }
+
+    input {
+        outline: none;
+    }
+}
+
+.container {
+    position: relative;
+    top: 100px;
+}
