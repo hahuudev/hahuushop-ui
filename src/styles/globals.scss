@@ -7,6 +7,7 @@
 html {
     font-size: 62.5%;
     line-height: 1.65;
+    color: "#374151";
 }
 
 body {
@@ -24,4 +25,14 @@ body {
 .container {
     position: relative;
     top: 100px;
+}
+
+.icon-loading {
+    animation: rotate 0.6s linear infinite;
+
+    @keyframes rotate {
+        100% {
+            transform: rotate(360deg);
+        }
+    }
 }
