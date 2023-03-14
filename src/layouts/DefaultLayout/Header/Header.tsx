@@ -63,7 +63,7 @@ function Header() {
 
                     <Box>
                         <div className="" aria-describedby={id} onClick={handleClick}>
-                            <Badge badgeContent={10} color="primary">
+                            <Badge badgeContent={10} color="info">
                                 <NotificationsActiveIcon fontSize="large" />
                             </Badge>
                         </div>
@@ -86,7 +86,7 @@ function Header() {
                     {!currentUser ? (
                         <Box>
                             <Link href="/login">
-                                <Stack direction="row" alignItems="center" sx={{ color: "red" }}>
+                                <Stack direction="row" alignItems="center" sx={{ color: "#0d05e1" }}>
                                     <PersonIcon fontSize="large" />
                                     <Box sx={{ ml: "6px" }}>
                                         <Typography>Đăng nhập</Typography>
