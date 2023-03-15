@@ -28,6 +28,14 @@ body {
     top: 100px;
 }
 
+.max-w-layout {
+    max-width: 1334px;
+    margin: 0 auto;
+
+    padding: 12px;
+    
+}
+
 .icon-loading {
     animation: rotate 0.6s linear infinite;
 
@@ -35,6 +43,18 @@ body {
         100% {
             transform: rotate(360deg);
         }
+    }
+}
+// Slider 
+.swiper-button-prev, .swiper-button-next {
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.2);
+
+    &::after {
+        font-size: 16px !important;
+        color: #fff;
     }
 }
 

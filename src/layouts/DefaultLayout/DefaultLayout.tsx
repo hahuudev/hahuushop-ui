@@ -8,9 +8,11 @@ function DefaultLayout({ children }: React.PropsWithChildren<{}>) {
         <>
             <Header />
 
-            <div className="container">
+            <div className="container ">
                 <SeoBar />
-                <main>{children}</main>
+                <main className="max-w-layout" style={{ marginTop: "18px" }}>
+                    {children}
+                </main>
                 <Footer />
             </div>
         </>
