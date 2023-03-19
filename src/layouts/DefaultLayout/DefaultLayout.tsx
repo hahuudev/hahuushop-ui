@@ -1,16 +1,22 @@
+import Container from "@mui/material/Container";
 import React from "react";
 import Footer from "./Footer";
 import Header from "./Header";
+import SeoBar from "./SeoBar";
 
 function DefaultLayout({ children }: React.PropsWithChildren<{}>) {
     return (
         <>
             <Header />
 
-            <div className="container">
-                <main>{children}</main>
-                <Footer />
-            </div>
+            <main className="container ">
+                <SeoBar />
+                <Container className="max-w-layout">
+                    {children}
+                </Container>
+            </main>
+            
+            <Footer />
         </>
     );
 }
