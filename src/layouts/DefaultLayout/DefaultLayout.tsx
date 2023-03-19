@@ -1,3 +1,4 @@
+import Container from "@mui/material/Container";
 import React from "react";
 import Footer from "./Footer";
 import Header from "./Header";
@@ -8,13 +9,14 @@ function DefaultLayout({ children }: React.PropsWithChildren<{}>) {
         <>
             <Header />
 
-            <div className="container ">
+            <main className="container ">
                 <SeoBar />
-                <main className="max-w-layout" style={{ marginTop: "18px" }}>
+                <Container className="max-w-layout">
                     {children}
-                </main>
-                <Footer />
-            </div>
+                </Container>
+            </main>
+            
+            <Footer />
         </>
     );
 }

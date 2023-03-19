@@ -36,21 +36,23 @@ function Header() {
     const currentUser: boolean = false;
 
     return (
-        <AppBar sx={{ height: "100px", backgroundColor: "#fff", color: "#1976d2" }}>
-            <div className="max-w-layout" style={{ height: "100%" }}>
+        <AppBar sx={{ height: "90px", backgroundColor: "#fff", color: "#1976d2" }}>
+            <div style={{ height: "100%" }}>
                 <Stack
                     direction="row"
-                    sx={{ height: "60%", w: "100%" }}
+                    sx={{ height: "60%" }}
                     alignItems="center"
+                    className="max-w-layout"
                     justifyContent="space-between"
                 >
                     <Typography
                         variant="h1"
                         sx={{
                             fontSize: { xs: "2rem", md: "2.6rem" },
-                            minWidth: "100px",
+                            minWidth: "180px",
                             height: "100%",
                             display: "flex",
+                            mb: "-30px",
                             alignItems: "flex-end",
                         }}
                     >
@@ -61,7 +63,13 @@ function Header() {
 
                     <Search />
 
-                    <Stack direction="row" alignItems="center" spacing={4}>
+                    <Stack
+                        direction="row"
+                        alignItems="center"
+                        justifyContent="flex-end"
+                        spacing={4}
+                        sx={{ minWidth: "350px" }}
+                    >
                         {/* Giỏ hàng */}
                         <Cart />
 
@@ -129,13 +137,14 @@ function Header() {
                     <hr />
                 </Line>
 
-                <Stack
-                    height="38%"
-                    paddingLeft={{ xs: "10rem", md: "16rem" }}
-                    direction="row"
-                    justifyContent="space-between"
-                >
-                    <Stack spacing="3.4rem" direction="row" flex="1" alignItems="center">
+                <Stack height="38%" direction="row" className="max-w-layout" justifyContent="space-between">
+                    <Stack
+                        paddingLeft={{ xs: "10rem", md: "16rem" }}
+                        spacing="3.4rem"
+                        direction="row"
+                        flex="1"
+                        alignItems="center"
+                    >
                         <Link href="/">
                             <Typography
                                 sx={{ color: "#ff424e", "&:hover": { color: "#1976d2" }, fontSize: "1.4rem" }}

@@ -25,15 +25,14 @@ body {
 
 .container {
     position: relative;
-    top: 100px;
+    top: 91px;
+    background-color: #f5f5fa;
 }
 
 .max-w-layout {
     max-width: 1334px;
     margin: 0 auto;
-
-    padding: 12px;
-    
+    padding: 0 12px;
 }
 
 .icon-loading {
@@ -45,8 +44,9 @@ body {
         }
     }
 }
-// Slider 
-.swiper-button-prev, .swiper-button-next {
+// Slider
+.swiper-button-prev,
+.swiper-button-next {
     width: 36px !important;
     height: 36px !important;
     border-radius: 50%;
@@ -58,6 +58,7 @@ body {
     }
 }
 
+//
 .text-vertical {
     display: -webkit-box;
     word-wrap: break-word;
@@ -76,4 +77,17 @@ body {
 }
 .vertical-4 {
     -webkit-line-clamp: 4;
+}
+
+// flex
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }

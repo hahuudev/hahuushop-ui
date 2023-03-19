@@ -12,8 +12,9 @@ import React, { useRef, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 
 const SearchInput = styled("div")({
-    width: "750px",
+    maxWidth: "750px",
     height: "40px",
+    flexGrow: 1,
     border: "1px solid red",
     borderRadius: "10px",
     display: "flex",
