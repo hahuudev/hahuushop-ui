@@ -52,7 +52,7 @@ function Header() {
                             minWidth: "180px",
                             height: "100%",
                             display: "flex",
-                            mb: "-30px",
+                            mb: "-14px",
                             alignItems: "flex-end",
                         }}
                     >

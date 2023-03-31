@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Heebo:wght@100;200;300;400;500;600;700;800;900&family=IBM+Plex+Sans:ital,wght@0,100;0,400;0,500;0,600;0,700;1,100;1,200;1,400;1,500;1,700&family=Poppins:wght@100;200;300;400;500;600;700;800&family=Roboto:ital,wght@0,100;0,500;0,700;0,900;1,300;1,400;1,700;1,900&display=swap");
+
 * {
     margin: 0;
     padding: 0;
@@ -8,6 +10,8 @@ html {
     font-size: 62.5%;
     line-height: 1.65;
     color: "#374151";
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
 }
 
 body {
@@ -15,6 +19,7 @@ body {
 
     a {
         display: block;
+        color: #3d3d3d;
         text-decoration: none;
     }
 
@@ -44,6 +49,26 @@ body {
         }
     }
 }
+//
+.btn-active {
+    position: relative;
+    font-size: 1.66rem;
+    font-weight: 600;
+    color: #1e88de;
+
+    &::after {
+        content: "";
+        display: block;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 3px;
+        border-radius: 3px;
+        background-color: #1475c5;
+    }
+}
+
 // Slider
 .swiper-button-prev,
 .swiper-button-next {

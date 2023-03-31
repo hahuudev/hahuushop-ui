@@ -26,9 +26,9 @@ export default function Home() {
     const config = {
         // autoplay: true,
         delay: 5000,
-        speed: 700,
+        speed: 400,
         slidesPerView: 10,
-        slidesPerGroup: 10,
+        slidesPerGroup: 5,
         navigation: {
             prevEl: ".swiper-categories-prev",
             nextEl: ".swiper-categories-next",
@@ -39,6 +39,7 @@ export default function Home() {
             <Head>
                 <title>Home</title>
             </Head>
+
             <Box mt="20px">
                 <Grid container>
                     <Grid item md={8.5} sx={{ borderRadius: "10px", overflow: "hidden", border: "1px solid #d4d4d4" }}>
@@ -63,7 +64,7 @@ export default function Home() {
                     <Swiper {...config} style={{ padding: "2px" }}>
                         {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((item) => (
                             <SwiperSlide key={item}>
-                                <CategoryBoxStyle href="/">
+                                <CategoryBoxStyle href="/products?category=thoi-trang-nam">
                                     <Image
                                         width="200"
                                         height={200}
