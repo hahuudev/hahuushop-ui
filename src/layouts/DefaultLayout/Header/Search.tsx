@@ -79,7 +79,6 @@ function Search() {
 
     const loading = true;
 
-    console.log(inputRef.current);
 
     return (
         <>

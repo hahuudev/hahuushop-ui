@@ -99,7 +99,7 @@ function Header() {
                         {/* Avatar */}
                         {!currentUser ? (
                             <Box>
-                                <Link href="/login">
+                                <Link href="/signin">
                                     <Stack direction="row" alignItems="center" sx={{ color: "#0d05e1" }}>
                                         <PersonIcon fontSize="large" />
                                         <Box sx={{ ml: "6px" }}>

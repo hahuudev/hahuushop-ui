@@ -1,22 +1,31 @@
 import DefaultLayout from "@/layouts/DefaultLayout";
 import "@/styles/globals.scss";
+import type { NextPage } from "next";
 import type { AppProps } from "next/app";
-import { ReactElement } from "react";
+import type { ReactElement, ReactNode } from "react";
+import NextNProgress from "nextjs-progressbar";
+import { QueryClient, QueryClientProvider } from "react-query";
 
-type NextComponentType = {
-    getLayout?: (page: ReactElement) => ReactElement;
+const queryClient = new QueryClient();
+
+export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+    getLayout?: (page: ReactElement) => ReactNode;
 };
 
-type NextPageType = NextComponentType & {
-    // Add any custom props here
+type AppPropsWithLayout = AppProps & {
+    Component: NextPageWithLayout;
 };
 
-type CustomAppProps = AppProps & {
-    Component: NextPageType;
-};
+export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+    // Use the layout defined at the page level, if available
+    const getLayout = Component.getLayout ?? ((page) => <DefaultLayout>{page}</DefaultLayout>);
 
-export default function App({ Component, pageProps }: CustomAppProps) {
-    const getLayout = Component.getLayout || ((page) => <DefaultLayout>{page}</DefaultLayout>);
-
-    return getLayout(<Component {...pageProps} />);
+    return getLayout(
+        <>
+            <QueryClientProvider client={queryClient}>
+                <NextNProgress />
+                <Component {...pageProps} />
+            </QueryClientProvider>
+        </>
+    );
 }

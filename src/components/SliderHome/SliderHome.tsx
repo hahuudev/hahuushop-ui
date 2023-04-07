@@ -1,7 +1,6 @@
 import SwiperCore, { Autoplay, Navigation, Pagination } from "swiper";
-import "swiper/css/navigation";
+
 import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/swiper.min.css";
 
 // Cài đặt các module của Swiper
 SwiperCore.use([Navigation, Pagination, Autoplay]);

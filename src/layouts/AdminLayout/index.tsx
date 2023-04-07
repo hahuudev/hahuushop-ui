@@ -1,7 +1,7 @@
 import React from "react";
 
-function AdminLayout() {
-    return <div>AdminLayout</div>;
+function AdminLayout({ children }: React.PropsWithChildren<{}>) {
+    return <div>AdminLayout {children}</div>;
 }
 
 export default AdminLayout;

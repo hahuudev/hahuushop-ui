@@ -1,13 +1,18 @@
+import { getAllProducts } from "@/apis/products";
 import BoxModule from "@/components/BoxModule";
 import ProductItem from "@/components/ProductItem";
 import SliderHome from "@/components/SliderHome";
+import { IProduct } from "@/types";
 import styled from "@emotion/styled";
 import { Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
+import { AxiosResponse } from "axios";
+import { GetServerSideProps } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper.min.css";
 
@@ -22,7 +27,11 @@ const CategoryBoxStyle = styled(Link)({
     },
 });
 
-export default function Home() {
+type PropsType = {
+    products: IProduct[];
+};
+
+const Home = ({ products }: PropsType) => {
     const config = {
         // autoplay: true,
         delay: 5000,
@@ -34,6 +43,7 @@ export default function Home() {
             nextEl: ".swiper-categories-next",
         },
     };
+
     return (
         <>
             <Head>
@@ -52,7 +62,6 @@ export default function Home() {
                                 alt="h"
                                 width={500}
                                 height={500}
-                                layout="responsive"
                                 src="https://salt.tikicdn.com/cache/w750/ts/tikimsp/df/9c/e5/7c57ed5071a5a5c5052873e835569ac4.png.webp"
                             />
                         </Box>
@@ -60,30 +69,30 @@ export default function Home() {
                 </Grid>
 
                 {/* Danh mục */}
-                <BoxModule>
+                {/* <BoxModule>
                     <Swiper {...config} style={{ padding: "2px" }}>
-                        {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((item) => (
-                            <SwiperSlide key={item}>
+                        {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((item, index) => (
+                            <SwiperSlide key={index}>
                                 <CategoryBoxStyle href="/products?category=thoi-trang-nam">
                                     <Image
                                         width="200"
                                         height={200}
-                                        layout="responsive"
+                                         objectFit="contain"
                                         alt=""
-                                        src="https://cf.shopee.vn/file/687f3967b7c2fe6a134a2c11894eea4b_tn"
+                                        src="https://salt.tikicdn.com/cache/w1200/media/catalog/producttmp/84/3d/55/f86c2a0c2027505403d32c371b036f44.jpg"
                                     />
                                     <Typography
                                         component="h4"
                                         sx={{ textAlign: "center", fontSize: "1.32rem", color: "black" }}
                                     >
-                                        Thời Trang Nam và Nữ
+                                        Iphone
                                     </Typography>
                                 </CategoryBoxStyle>
                                 <CategoryBoxStyle href="/">
                                     <Image
                                         width="200"
                                         height={200}
-                                        layout="responsive"
+                                         objectFit="contain"
                                         alt=""
                                         src="https://cf.shopee.vn/file/687f3967b7c2fe6a134a2c11894eea4b_tn"
                                     />
@@ -91,20 +100,20 @@ export default function Home() {
                                         component="h4"
                                         sx={{ textAlign: "center", fontSize: "1.32rem", color: "black" }}
                                     >
-                                        Thời Trang Nam và Nữ
+                                        Sam sung
                                     </Typography>
                                 </CategoryBoxStyle>
                             </SwiperSlide>
                         ))}
                     </Swiper>
-                </BoxModule>
+                </BoxModule> */}
 
                 {/* Product */}
                 <BoxModule title="Danh sách sản phẩm">
                     <Grid container p="6px" spacing="8px">
-                        {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((product) => (
-                            <Grid key={product} item xs={2}>
-                                <ProductItem />
+                        {products.map((product, index) => (
+                            <Grid key={index} item xs={2}>
+                                <ProductItem {...product} />
                             </Grid>
                         ))}
                     </Grid>
@@ -112,4 +121,13 @@ export default function Home() {
             </Box>
         </>
     );
-}
+};
+
+export default Home;
+
+export const getServerSideProps: GetServerSideProps = async () => {
+    const res = await getAllProducts();
+    return {
+        props: { products: res.data.products },
+    };
+};
