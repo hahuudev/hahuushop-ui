@@ -6,12 +6,9 @@ import Link from "next/link";
 import StarIcon from "@mui/icons-material/Star";
 import React from "react";
 import Box from "@mui/system/Box";
+import { IProduct } from "@/types";
 
-interface ProductItemProps {
-    slug?: string;
-}
-
-function ProductItem({ slug }: ProductItemProps) {
+function ProductItem({ name, images, slug, original_price, price }: IProduct) {
     return (
         <Card
             sx={{
@@ -30,12 +27,14 @@ function ProductItem({ slug }: ProductItemProps) {
                 },
             }}
         >
-            <Link href="/h">
+            <Link href={`/${slug}`}>
                 <Image
                     alt="d"
                     className="image-product"
-                    src="https://salt.tikicdn.com/cache/750x750/ts/product/0f/08/21/8995e74fd95c47c4ab9ef244a5559176.png.webp"
+                    src={images?.[0].base_url}
                     layout="responsive"
+                    objectFit="cover"
+                    priority={true}
                     width={200}
                     height={100}
                 />
@@ -51,9 +50,9 @@ function ProductItem({ slug }: ProductItemProps) {
                 <Typography
                     className="text-vertical vertical-2"
                     component="h3"
-                    sx={{ my: "1.2rem", fontSize: "1.3rem", fontWeight: "650", color: "#3b3b3b" }}
+                    sx={{ my: "1.2rem", fontSize: "1.3rem", fontWeight: "650", color: "#3b3b3b", height: "3.6rem" }}
                 >
-                    Apple iPad 10.2-inch (9th Gen) Wi-Fi, 2021
+                    {name}
                 </Typography>
 
                 <Stack
@@ -62,8 +61,13 @@ function ProductItem({ slug }: ProductItemProps) {
                     justifyContent="space-between"
                     sx={{ color: "#ff3a47", fontSize: "1.2rem" }}
                 >
-                    <Typography sx={{ fontSize: "1.4rem" }}>6.889.000 Đ</Typography>
-                    <Typography component="span">-23%</Typography>
+                    <Typography sx={{ fontSize: "1.4rem" }}>{price.toLocaleString()} Đ</Typography>
+                    <Typography
+                        component="span"
+                        sx={{ color: "#df5656", fontSize: "1.2rem", textDecoration: "line-through" }}
+                    >
+                        {original_price.toLocaleString()} đ
+                    </Typography>
                 </Stack>
                 <Stack
                     direction="row"
@@ -75,12 +79,12 @@ function ProductItem({ slug }: ProductItemProps) {
                             borderTopLeftRadius: "10px",
                             bgcolor: "#39a6fa",
                             display: "flex",
-                            p: "4px 10px 0 10px",
+                            p: "2px 10px 2px 10px",
                             fontSize: "1.08rem",
                             color: "#fff",
                         }}
                     >
-                        Tài trợ
+                        {Math.floor((price * 100) / original_price) - 100} %
                     </Box>
                     <Box sx={{ m: "4px 10px 0 0 ", bgcolor: "#87ffdb", display: "flex", fontSize: "1rem", p: "0 1px" }}>
                         Yêu thích
