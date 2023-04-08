@@ -15,11 +15,15 @@ import SwiperCore, { Pagination } from "swiper";
 import Image from "next/image";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { IProduct } from "@/types";
-import { getAllProducts, getProductById, getProductBySlug } from "@/apis/products";
+import { getAllProducts, getProductBySlug } from "@/apis/products";
 import Card from "@mui/material/Card";
 import Button from "@mui/material/Button";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import BoxModule from "@/components/BoxModule/BoxModule";
+import ProductItem from "@/components/ProductItem/ProductItem";
+import Chip from "@mui/material/Chip";
 
 SwiperCore.use([Pagination]);
 
@@ -78,6 +82,13 @@ const slides = [
 interface PropsType {
     product: IProduct;
 }
+
+const config = {
+    delay: 5000,
+    speed: 400,
+    slidesPerView: 6,
+    slidesPerGroup: 3,
+};
 function ProductDetail({ product }: PropsType) {
     const { name, images, price, original_price, description } = product;
     const [explore, setExplore] = useState<boolean>(false);
@@ -88,7 +99,7 @@ function ProductDetail({ product }: PropsType) {
             <Navigation />
 
             {/*  */}
-            <Grid container spacing="16px">
+            <Grid container spacing="34px">
                 <Grid item md={5}>
                     {/* Ảnh sp */}
                     <Swiper
@@ -173,11 +184,85 @@ function ProductDetail({ product }: PropsType) {
                         </Typography>
                     </Stack>
 
-                    <Typography>Sản phẩm như cc đừng mưa</Typography>
+                    <Box>
+                        <Typography component="h5" sx={{ fontSize: "1.5rem" }}>
+                            2 mã giảm giá
+                        </Typography>
+
+                        <Stack direction="row" spacing="8px" mt="10px">
+                            <Chip label="Giảm 15k" variant="outlined" clickable />
+                            <Chip label="Giảm 15k" variant="outlined" clickable />
+                            <Chip label="Giảm 15k" variant="outlined" clickable />
+                        </Stack>
+                    </Box>
+
+                    {/* Seoler */}
+                    <Stack
+                        direction="row"
+                        sx={{
+                            border: "1px solid red",
+                            borderRadius: "10px",
+                            my: "12px",
+                            width: "80%",
+                            p: "14px 20px",
+                            background: "linear-gradient(100deg, rgb(255, 66, 78), rgb(253, 130, 10))",
+                            color: "#ffff",
+                        }}
+                        alignItems="center"
+                        justifyContent="space-between"
+                    >
+                        <Box>
+                            <Typography sx={{ fontSize: "2.1rem" }}>52.000 đ</Typography>
+                            <Stack direction="row" spacing="20px">
+                                <Typography sx={{ textDecoration: "line-through" }}>52.000 đ</Typography>
+                                <Typography>-14%</Typography>
+                            </Stack>
+                        </Box>
+                        <Stack>
+                            <Typography sx={{ fontSize: "1.3rem" }}>Kết thúc sau</Typography>
+                            <Stack my="3px" direction="row" spacing="8px" alignItems="center">
+                                <Typography
+                                    component="span"
+                                    sx={{ bgcolor: "#fff", borderRadius: "3px", color: "#e96a16", p: "0 2px" }}
+                                >
+                                    01
+                                </Typography>
+                                <span>:</span>
+                                <Typography
+                                    component="span"
+                                    sx={{ bgcolor: "#fff", borderRadius: "1px", color: "#e96a16", p: "0 2px" }}
+                                >
+                                    42
+                                </Typography>
+                                <span>:</span>
+                                <Typography
+                                    component="span"
+                                    sx={{
+                                        bgcolor: "#fff",
+                                        borderRadius: "1px",
+                                        color: "#e96a16",
+                                        p: "0 2px",
+                                    }}
+                                >
+                                    36
+                                </Typography>
+                            </Stack>
+
+                            <Typography sx={{ fontSize: "1.3rem" }}>Đã bán: 14</Typography>
+                        </Stack>
+                    </Stack>
+
+                    {/*  */}
+                    <Box>
+                        Bảo hiểm:
+                        <Typography component="span" ml="6px">
+                            Bảo hiểm quyền lợi tiêu dùng bởi HSHOP
+                        </Typography>
+                    </Box>
 
                     {/*  */}
                     <Stack sx={{ my: "2rem" }} direction="row" spacing="2rem">
-                        <Typography component="span">Số lượng</Typography>
+                        <Typography component="span">Số lượng | |</Typography>
                         <Typography component="span">1000 sản phẩm sẵn có</Typography>
                     </Stack>
 
@@ -190,6 +275,19 @@ function ProductDetail({ product }: PropsType) {
                 </Grid>
             </Grid>
 
+            {/* Sản phẩm tương tự */}
+            <BoxModule title="Sản phẩm tương tự">
+                <Swiper {...config} style={{ padding: "2px" }}>
+                    {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((item, index) => (
+                        <SwiperSlide key={index}>
+                            <Box p="0 10px">
+                                <ProductItem {...product} />
+                            </Box>
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
+            </BoxModule>
+
             {/* Thông tin sản phẩm */}
 
             <Card sx={{ my: { sx: "2rem", md: "4rem" }, p: "1.2rem 2rem", bgcolor: "#c2c2c2" }}>
@@ -199,13 +297,13 @@ function ProductDetail({ product }: PropsType) {
             </Card>
 
             {/* Giới thiệu về sản phẩm */}
-            <Card sx={{ p: "1.2rem 2rem", maxHeight: "560px", position: "relative" }}>
+            <Card sx={{ p: "1.2rem 2rem", maxHeight: explore ? "" : "500px", position: "relative" }}>
                 <Typography component="h3" sx={{ fontSize: "2.4rem", mb: "1.2rem" }}>
                     Mô tả sản phẩm
                 </Typography>
                 <div dangerouslySetInnerHTML={{ __html: description }} className="product-description"></div>
 
-                {!explore && (
+                {!explore ? (
                     <Stack
                         sx={{
                             position: "absolute",
@@ -220,9 +318,24 @@ function ProductDetail({ product }: PropsType) {
                         alignItems="center"
                         justifyContent="flex-end"
                     >
-                        <Button variant="outlined" sx={{ width: "340px", fontSize: "1.3rem", borderRadius: "10px" }}>
+                        <Button
+                            variant="outlined"
+                            sx={{ width: "340px", fontSize: "1.3rem", borderRadius: "10px" }}
+                            onClick={() => setExplore(true)}
+                        >
                             Xem thêm
                             <ArrowRightIcon fontSize="large" />
+                        </Button>
+                    </Stack>
+                ) : (
+                    <Stack>
+                        <Button
+                            variant="outlined"
+                            sx={{ width: "340px", fontSize: "1.3rem", borderRadius: "10px", m: "10px auto" }}
+                            onClick={() => setExplore(false)}
+                        >
+                            Thu nhỏ
+                            <ArrowDropUpIcon fontSize="large" />
                         </Button>
                     </Stack>
                 )}

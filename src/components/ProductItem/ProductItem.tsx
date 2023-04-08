@@ -84,7 +84,7 @@ function ProductItem({ name, images, slug, original_price, price }: IProduct) {
                             color: "#fff",
                         }}
                     >
-                        -23%
+                        {Math.floor((price * 100) / original_price) - 100} %
                     </Box>
                     <Box sx={{ m: "4px 10px 0 0 ", bgcolor: "#87ffdb", display: "flex", fontSize: "1rem", p: "0 1px" }}>
                         Yêu thích

@@ -69,7 +69,7 @@ const Home = ({ products }: PropsType) => {
                 </Grid>
 
                 {/* Danh mục */}
-                {/* <BoxModule>
+                <BoxModule>
                     <Swiper {...config} style={{ padding: "2px" }}>
                         {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((item, index) => (
                             <SwiperSlide key={index}>
@@ -77,7 +77,8 @@ const Home = ({ products }: PropsType) => {
                                     <Image
                                         width="200"
                                         height={200}
-                                         objectFit="contain"
+                                        objectFit="cover"
+                                        layout="responsive"
                                         alt=""
                                         src="https://salt.tikicdn.com/cache/w1200/media/catalog/producttmp/84/3d/55/f86c2a0c2027505403d32c371b036f44.jpg"
                                     />
@@ -92,7 +93,8 @@ const Home = ({ products }: PropsType) => {
                                     <Image
                                         width="200"
                                         height={200}
-                                         objectFit="contain"
+                                        objectFit="cover"
+                                        layout="responsive"
                                         alt=""
                                         src="https://cf.shopee.vn/file/687f3967b7c2fe6a134a2c11894eea4b_tn"
                                     />
@@ -106,7 +108,7 @@ const Home = ({ products }: PropsType) => {
                             </SwiperSlide>
                         ))}
                     </Swiper>
-                </BoxModule> */}
+                </BoxModule>
 
                 {/* Product */}
                 <BoxModule title="Danh sách sản phẩm">
