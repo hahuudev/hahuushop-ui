@@ -1,0 +1,21 @@
+.product-slide-preview {
+    padding: 0 1rem;
+    margin-top: 2rem;
+    display: flex;
+
+    & > :not([hidden]) ~ :not([hidden]) {
+        margin-left: 1rem;
+    }
+
+    img {
+        cursor: pointer;
+        width: 60px;
+        height: 60px;
+        border-radius: 4px;
+        border: 1px solid #2ae6ed;
+
+        &:hover {
+            opacity: 0.9;
+        }
+    }
+}
