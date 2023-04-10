@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Heebo:wght@100;200;300;400;500;600;700;800;900&family=IBM+Plex+Sans:ital,wght@0,100;0,400;0,500;0,600;0,700;1,100;1,200;1,400;1,500;1,700&family=Poppins:wght@100;200;300;400;500;600;700;800&family=Roboto:ital,wght@0,100;0,500;0,700;0,900;1,300;1,400;1,700;1,900&display=swap");
 @import "swiper/css/navigation";
 @import "swiper/swiper.min.css";
+@import "react-quill/dist/quill.snow.css";
 
 * {
     margin: 0;
@@ -121,8 +122,7 @@ body {
 
 .product-description {
     line-height: 2.5rem;
-    color: #4a4746,
-    p {
+    color: #4a4746, p {
         margin: 1rem 0;
     }
 }

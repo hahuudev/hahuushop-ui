@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { ReactElement, ReactNode } from "react";
-import { useForm } from "react-hook-form";
+import { ReactElement, ReactNode, useRef } from "react";
+import { useForm, FieldError } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
@@ -11,26 +11,89 @@ import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Editor from "./Editor";
+import { IProduct } from "@/types";
+import { useMutation, useQuery } from "react-query";
+import { newProduct, updateProduct } from "@/apis/products";
+import { getAllCategories } from "@/apis/category";
+import MenuItem from "@mui/material/MenuItem";
+import { uploadFiles } from "@/apis/upload";
+import { Avatar, Stack } from "@mui/material";
+import { useRouter } from "next/router";
+import { toast } from "react-toastify";
+// import LinearProgressWithLabel from "./Progress";
 
 const schema = yup.object().shape({
-    // email: yup.string().required("Required").email("Email invalid"),
-    // password: yup.string().min(6).required("Required"),
+    name: yup.string().required(),
+    price: yup.string().required(),
+    original_price: yup.string().required(),
+    images: yup
+        .array()
+        .required()
+        .of(yup.object({ url: yup.string().required() })),
+    categoryId: yup.string().required(),
+    description: yup.string().min(20).required(),
 });
 
-interface FormProductProps {
+interface FormProductProps extends IProduct {
     edit?: boolean;
+    // product: IProduct;
 }
 
-const FormProduct = ({ edit = false }: FormProductProps) => {
+const FormProduct = ({ edit = false, ...product }: FormProductProps) => {
+    const { _id, name, slug, images, description, price, original_price } = product;
+    const router = useRouter();
     const {
         register,
         handleSubmit,
         setValue,
+        watch,
         formState: { errors },
-    } = useForm({ mode: "onSubmit", resolver: yupResolver(schema) });
+    } = useForm<IProduct>({
+        mode: "onSubmit",
+        resolver: yupResolver(schema),
+        defaultValues: product ? { name, slug, images, description, price, original_price } : {},
+    });
 
-    const onSubmit = async (data: any) => {
-        console.log(data);
+    const { mutate: postProduct } = useMutation(newProduct);
+    const { mutate: patchProduct } = useMutation(updateProduct);
+    const { data: categories } = useQuery("categories", getAllCategories);
+
+    const handleUploadImages = async (e: any) => {
+        const files = e.target.files;
+        const formData = new FormData();
+
+        for (let i = 0; i < files.length; i++) {
+            formData.append("images", files[i]);
+        }
+
+        const res = await uploadFiles(formData);
+        setValue("images", res.data.urls);
+    };
+
+    const onSubmit = async (data: IProduct) => {
+        if (edit) {
+            console.log(data);
+            patchProduct(
+                { _id, ...data },
+                {
+                    onSuccess: (data) => {
+                        router.push("/admin/products");
+                    },
+                }
+            );
+        }
+
+        if (edit === false) {
+            postProduct(data, {
+                onSuccess: (data) => {
+                    toast.success("Thêm mới sản phẩm thành công");
+                    router.push("/admin/products");
+                },
+                onError: (error) => {
+                    console.log(error);
+                },
+            });
+        }
     };
 
     return (
@@ -63,6 +126,8 @@ const FormProduct = ({ edit = false }: FormProductProps) => {
                                 marginTop: "1.4px",
                             },
                         }}
+                        error={!!errors.name}
+                        helperText={!!errors.name ? (errors.name as FieldError).message : ""}
                         label="Tên sản phẩm"
                         autoFocus
                         {...register("name")}
@@ -86,6 +151,8 @@ const FormProduct = ({ edit = false }: FormProductProps) => {
                             },
                         }}
                         id="price"
+                        error={!!errors.price}
+                        helperText={!!errors.price ? (errors.price as FieldError).message : ""}
                     />
                     <TextField
                         margin="normal"
@@ -106,12 +173,65 @@ const FormProduct = ({ edit = false }: FormProductProps) => {
                             },
                         }}
                         id="original_price"
+                        error={!!errors.original_price}
+                        helperText={!!errors.original_price ? (errors.original_price as FieldError).message : ""}
                     />
 
-                    <Editor setValue={setValue} />
+                    {/* Hình ảnh */}
 
+                    <Typography sx={{ fontSize: "1.4rem", my: "10px" }}>
+                        Mời chọn hình ảnh
+                        <Typography component="span" color="red">
+                            {!!errors.images ? `( ${(errors.images as FieldError).message}) ` : ""}
+                        </Typography>
+                    </Typography>
+
+                    {/* <LinearProgressWithLabel value={40} /> */}
+                    <Stack direction="row" spacing="20px">
+                        <TextField
+                            type="file"
+                            InputLabelProps={{ shrink: true }}
+                            onChange={handleUploadImages}
+                            inputProps={{ accept: ".jpg, .png, .jpeg", multiple: true }}
+                        />
+
+                        <Avatar src={watch("images")?.[0]?.url || product?.images?.[0]?.url} />
+                    </Stack>
+
+                    {/*  */}
+                    <Typography sx={{ fontSize: "1.4rem", my: "10px" }}>
+                        Mời chọn thể loại sản phẩm
+                        <Typography component="span" color="red">
+                            {!!errors.categoryId ? `( ${(errors.categoryId as FieldError).message}) ` : ""}
+                        </Typography>
+                    </Typography>
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        select
+                        label="Native select"
+                        defaultValue={categories?.data?.categories?.[0]._id || ""}
+                        {...register("categoryId")}
+                        helperText="Please select your currency"
+                    >
+                        {categories?.data?.categories?.map((category: any) => (
+                            <MenuItem key={category._id} value={category._id}>
+                                {category.name}
+                            </MenuItem>
+                        ))}
+                    </TextField>
+                    {/*  */}
+                    <Typography sx={{ fontSize: "1.4rem", my: "10px" }}>
+                        Chi tiết về sản phẩm{" "}
+                        <Typography component="span" color="red">
+                            {!!errors.description ? `( ${(errors.description as FieldError).message}) ` : ""}
+                        </Typography>
+                    </Typography>
+                    <Editor setValue={setValue} watch={watch} />
+                    {/*  */}
                     <Button type="submit" fullWidth variant="contained" sx={{ my: 3, py: "10px", fontSize: "1.23rem" }}>
-                        Update sản phẩm
+                        {edit ? "Update sản phẩm" : "Thêm mới sản phẩm"}
                     </Button>
                     <Grid container>
                         <Grid item xs>

@@ -1,8 +1,9 @@
+import { getAllCategories } from "@/apis/category";
 import { getAllProducts } from "@/apis/products";
 import BoxModule from "@/components/BoxModule";
 import ProductItem from "@/components/ProductItem";
 import SliderHome from "@/components/SliderHome";
-import { IProduct } from "@/types";
+import { ICategory, IProduct } from "@/types";
 import styled from "@emotion/styled";
 import { Typography } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -12,7 +13,7 @@ import { GetServerSideProps } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper.min.css";
 
@@ -29,9 +30,11 @@ const CategoryBoxStyle = styled(Link)({
 
 type PropsType = {
     products: IProduct[];
+    categories: ICategory[];
 };
 
-const Home = ({ products }: PropsType) => {
+const Home = ({ products, categories }: PropsType) => {
+    console.log(categories);
     const config = {
         // autoplay: true,
         delay: 5000,
@@ -71,9 +74,9 @@ const Home = ({ products }: PropsType) => {
                 {/* Danh mục */}
                 <BoxModule>
                     <Swiper {...config} style={{ padding: "2px" }}>
-                        {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((item, index) => (
+                        {[...categories, ...categories, ...categories].map((category, index) => (
                             <SwiperSlide key={index}>
-                                <CategoryBoxStyle href="/products?category=thoi-trang-nam">
+                                <CategoryBoxStyle href={`/products?category=${category._id}`}>
                                     <Image
                                         width="200"
                                         height={200}
@@ -86,10 +89,10 @@ const Home = ({ products }: PropsType) => {
                                         component="h4"
                                         sx={{ textAlign: "center", fontSize: "1.32rem", color: "black" }}
                                     >
-                                        Iphone
+                                        {category.name}
                                     </Typography>
                                 </CategoryBoxStyle>
-                                <CategoryBoxStyle href="/">
+                                <CategoryBoxStyle href={`/products?category=${category._id}`}>
                                     <Image
                                         width="200"
                                         height={200}
@@ -102,7 +105,7 @@ const Home = ({ products }: PropsType) => {
                                         component="h4"
                                         sx={{ textAlign: "center", fontSize: "1.32rem", color: "black" }}
                                     >
-                                        Sam sung
+                                        {category.name}
                                     </Typography>
                                 </CategoryBoxStyle>
                             </SwiperSlide>
@@ -128,8 +131,9 @@ const Home = ({ products }: PropsType) => {
 export default Home;
 
 export const getServerSideProps: GetServerSideProps = async () => {
-    const res = await getAllProducts();
+    const [res1, res2] = await Promise.all([getAllProducts(), getAllCategories()]);
     return {
-        props: { products: res.data.products },
+        props: { products: res1.data.products, categories: res2.data.categories },
     };
 };
+

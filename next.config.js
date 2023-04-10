@@ -2,7 +2,7 @@
 const nextConfig = {
     reactStrictMode: true,
     images: {
-        domains: ["salt.tikicdn.com", "cf.shopee.vn"],
+        domains: ["salt.tikicdn.com", "cf.shopee.vn", "res.cloudinary.com"],
     },
 };
 

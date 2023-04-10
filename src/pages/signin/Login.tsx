@@ -11,11 +11,11 @@ import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { NextPageWithLayout } from "../_app";
-import { request } from "@/configs";
 import { useMutation } from "react-query";
 import { signin } from "@/apis/auth";
 import { CurrentUserType } from "@/types/user";
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 
 const schema = yup.object().shape({
     email: yup.string().required("Required").email("Email invalid"),
@@ -37,7 +37,11 @@ const Login: NextPageWithLayout = () => {
         mutate(data, {
             onSuccess: (data) => {
                 localStorage.setItem("token", JSON.stringify(data.data?.access_token));
+
                 router.push("/");
+            },
+            onError(error: any) {
+                toast.error(error?.response?.data.message);
             },
         });
     };

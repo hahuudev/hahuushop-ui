@@ -13,29 +13,46 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { ReactElement } from "react";
-
-function Copyright(props: any) {
-    return (
-        <Typography variant="body2" color="text.secondary" align="center" {...props}>
-            {"Copyright © "}
-            <Link color="inherit" href="https://mui.com/">
-                Your Website
-            </Link>{" "}
-            {new Date().getFullYear()}
-            {"."}
-        </Typography>
-    );
-}
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { useRouter } from "next/router";
+import { CurrentUserType } from "@/types/user";
+import { useMutation } from "react-query";
+import { signup } from "@/apis/auth";
+import { toast } from "react-toastify";
+import { useForm, FieldError } from "react-hook-form";
 
 const theme = createTheme();
+
+const schema = yup.object().shape({
+    username: yup.string().required(),
+    email: yup.string().required("Required").email("Email invalid"),
+    password: yup.string().min(6).required("Required"),
+});
+
 const SignUp = () => {
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get("email"),
-            password: data.get("password"),
-        });
+    const router = useRouter();
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<CurrentUserType>({ mode: "onSubmit", resolver: yupResolver(schema) });
+
+    const { mutate } = useMutation(signup);
+
+    const handleSignUp = async (data: CurrentUserType) => {
+        mutate(
+            { confirmPassword: data.password, ...data },
+            {
+                onSuccess: (data) => {
+                    router.push("/login");
+                },
+                onError(error: any) {
+                    toast.error(error?.response?.data.message);
+                },
+            }
+        );
     };
 
     return (
@@ -56,54 +73,43 @@ const SignUp = () => {
                     <Typography component="h1" variant="h5">
                         Sign up
                     </Typography>
-                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                    <Box component="form" noValidate onSubmit={handleSubmit(handleSignUp)} sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={12}>
                                 <TextField
-                                    autoComplete="given-name"
-                                    name="firstName"
                                     required
                                     fullWidth
                                     id="firstName"
                                     label="First Name"
+                                    {...register("username")}
                                     autoFocus
+                                    error={!!errors.username}
+                                    helperText={!!errors.username ? (errors.username as FieldError).message : ""}
                                 />
                             </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    id="lastName"
-                                    label="Last Name"
-                                    name="lastName"
-                                    autoComplete="family-name"
-                                />
-                            </Grid>
+
                             <Grid item xs={12}>
                                 <TextField
                                     required
                                     fullWidth
                                     id="email"
                                     label="Email Address"
-                                    name="email"
                                     autoComplete="email"
+                                    {...register("email")}
+                                    error={!!errors.email}
+                                    helperText={!!errors.email ? (errors.email as FieldError).message : ""}
                                 />
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
                                     required
                                     fullWidth
-                                    name="password"
+                                    {...register("password")}
                                     label="Password"
                                     type="password"
                                     id="password"
-                                    autoComplete="new-password"
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <FormControlLabel
-                                    control={<Checkbox value="allowExtraEmails" color="primary" />}
-                                    label="I want to receive inspiration, marketing promotions and updates via email."
+                                    error={!!errors.password}
+                                    helperText={!!errors.password ? (errors.password as FieldError).message : ""}
                                 />
                             </Grid>
                         </Grid>
@@ -119,7 +125,6 @@ const SignUp = () => {
                         </Grid>
                     </Box>
                 </Box>
-                <Copyright sx={{ mt: 5 }} />
             </Container>
         </ThemeProvider>
     );

@@ -22,8 +22,8 @@ const slides = [
 function SliderHome() {
     // Cấu hình của slider
     const config = {
-        // autoplay: true,
-        delay: 5000,
+        autoplay: true,
+        delay: 3000,
         speed: 700,
         loop: true,
         navigation: {

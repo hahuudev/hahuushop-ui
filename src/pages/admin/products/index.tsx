@@ -10,6 +10,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import Image from "next/image";
 import Link from "next/link";
 import { ReactElement } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -26,11 +27,15 @@ const ProductsAdmin = (props: Props) => {
     const { mutate } = useMutation(deleteProduct);
 
     const handleDeleteProduct = async (id: string) => {
-        // mutate(id, {
-        //     onSuccess: (data) => {
-        //         queryClient.invalidateQueries("products");
-        //     },
-        // });
+        const confirm: boolean = window.confirm("Bạn có muốn xoá không!!");
+
+        if (confirm) {
+            mutate(id, {
+                onSuccess: (data) => {
+                    queryClient.invalidateQueries("products");
+                },
+            });
+        }
     };
 
     return (
@@ -59,24 +64,28 @@ const ProductsAdmin = (props: Props) => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {products?.map((product) => (
+                    {products?.map((product: IProduct) => (
                         <TableRow key={product._id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                             <TableCell component="th" scope="row" sx={{ fontSize: "1.2rem" }}>
                                 {product.name}
                             </TableCell>
                             <TableCell align="center" sx={{ fontSize: "1.2rem" }}>
-                                {" "}
                                 {product.price}
                             </TableCell>
                             <TableCell align="center" sx={{ fontSize: "1.2rem" }}>
-                                {" "}
                                 {product.original_price}
                             </TableCell>
-                            <TableCell align="center" sx={{ fontSize: "1.2rem" }}></TableCell>
+                            <TableCell align="center" sx={{ fontSize: "1.2rem" }}>
+                                <Image alt="" src={product.images?.[0].url} width="150" height="150"/>
+                            </TableCell>
                             <TableCell align="center" sx={{ fontSize: "1.2rem" }}>
                                 <Stack direction="row" alignItems="center">
                                     <Link href={`/admin/products/${product._id}/edit`}>Sửa</Link>
-                                    <Button onClick={() => handleDeleteProduct(product._id.toString())}>Xóa</Button>
+                                    <Button
+                                        onClick={() => handleDeleteProduct(product._id ? product._id.toString() : "")}
+                                    >
+                                        Xóa
+                                    </Button>
                                 </Stack>
                             </TableCell>
                         </TableRow>

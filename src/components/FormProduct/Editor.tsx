@@ -4,16 +4,16 @@ import dynamic from "next/dynamic";
 const ReactQuill = dynamic(() => import("react-quill"), {
     ssr: false,
 });
-import "react-quill/dist/quill.snow.css";
 
 // Define font sizes
 const fontSizes = ["8", "9", "10", "11", "12", "14", "16", "18", "20", "22", "24", "26", "28", "36", "48", "72"];
 
 type Props = {
     setValue: any;
+    watch: any;
 };
 
-const Editor = ({ setValue }: Props) => {
+const Editor = ({ setValue, watch }: Props) => {
     const modules = {
         toolbar: [
             [{ font: [] }],
@@ -27,9 +27,7 @@ const Editor = ({ setValue }: Props) => {
     };
 
     const handleChange = (value: string) => {
-        // setContent(value);
         setValue("description", value);
-        console.log(value);
     };
 
     return (
@@ -38,6 +36,7 @@ const Editor = ({ setValue }: Props) => {
             modules={modules}
             placeholder={"Viết ở đây..."}
             onChange={handleChange}
+            value={watch("description")}
             className="text-editor"
         />
     );
