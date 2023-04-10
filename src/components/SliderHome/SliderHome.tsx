@@ -1,3 +1,4 @@
+import Image from "next/image";
 import SwiperCore, { Autoplay, Navigation, Pagination } from "swiper";
 
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -22,8 +23,8 @@ const slides = [
 function SliderHome() {
     // Cấu hình của slider
     const config = {
-        // autoplay: true,
-        delay: 5000,
+        autoplay: true,
+        delay: 3000,
         speed: 700,
         loop: true,
         navigation: {
@@ -36,7 +37,7 @@ function SliderHome() {
         <Swiper {...config}>
             {slides.map((slide) => (
                 <SwiperSlide key={slide.id} style={{ display: "flex" }}>
-                    <img src={slide.image} alt={slide.title} />
+                    <Image src={slide.image} alt={slide.title} layout="reponsive"/>
                 </SwiperSlide>
             ))}
             <div className="swiper-button-prev"></div>

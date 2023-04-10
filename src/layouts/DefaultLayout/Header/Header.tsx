@@ -10,6 +10,9 @@ import PersonIcon from "@mui/icons-material/Person";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import Cart from "./Cart";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { getCurrentUser, logout } from "@/apis/auth";
+import { useRouter } from "next/router";
 
 const Line = styled("div")({
     display: "flex",
@@ -20,7 +23,11 @@ const Line = styled("div")({
 });
 
 function Header() {
+    const queryClient = useQueryClient();
+    const router = useRouter();
     const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+
+    const { data } = useQuery("currentUser", getCurrentUser);
 
     const handleClick = (event: any): void => {
         setAnchorEl(event.currentTarget);
@@ -33,7 +40,16 @@ function Header() {
     const open = Boolean(anchorEl);
     const id = open ? "simple-popover" : undefined;
 
-    const currentUser: boolean = false;
+    const currentUser: boolean = !!data?.data?.user;
+
+    const handleLogout = async () => {
+        try {
+            await logout();
+            queryClient.setQueryData("currentUser", null);
+            localStorage.removeItem("token");
+            router.push("signin");
+        } catch (error) {}
+    };
 
     return (
         <AppBar sx={{ height: "90px", backgroundColor: "#fff", color: "#1976d2" }}>
@@ -76,15 +92,15 @@ function Header() {
                         {/* Thông báo */}
 
                         <Box>
-                            <div className="" aria-describedby={id} onClick={handleClick}>
+                            <div className="" aria-describedby="header-notify" onClick={handleClick}>
                                 <Badge badgeContent={10} color="info">
                                     <NotificationsActiveIcon fontSize="large" />
                                 </Badge>
                             </div>
 
                             <Popover
-                                id={id}
-                                open={open}
+                                id="header-notify"
+                                open={false}
                                 anchorEl={anchorEl}
                                 onClose={handleClose}
                                 anchorOrigin={{
@@ -125,7 +141,24 @@ function Header() {
                                         horizontal: "left",
                                     }}
                                 >
-                                    <Typography sx={{ p: 2 }}>The content of the Popover.</Typography>
+                                    <Stack p="10px 14px">
+                                        <Typography sx={{ fontSize: "1.4rem", color: "#2404b1" }}>
+                                            {data?.data?.user.username}
+                                        </Typography>
+                                        {data?.data?.user.role === "admin" && (
+                                            <Link href="/admin">
+                                                <Typography sx={{ py: "6px", fontSize: "1.4rem" }}>
+                                                    Quản trị website
+                                                </Typography>
+                                            </Link>
+                                        )}
+                                        <Typography
+                                            sx={{ fontSize: "1.4rem", cursor: "pointer" }}
+                                            onClick={handleLogout}
+                                        >
+                                            Logout
+                                        </Typography>
+                                    </Stack>
                                 </Popover>
                             </Box>
                         )}

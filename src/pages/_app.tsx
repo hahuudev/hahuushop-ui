@@ -2,9 +2,11 @@ import DefaultLayout from "@/layouts/DefaultLayout";
 import "@/styles/globals.scss";
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
-import type { ReactElement, ReactNode } from "react";
 import NextNProgress from "nextjs-progressbar";
+import type { ReactElement, ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const queryClient = new QueryClient();
 
@@ -20,11 +22,12 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     // Use the layout defined at the page level, if available
     const getLayout = Component.getLayout ?? ((page) => <DefaultLayout>{page}</DefaultLayout>);
 
-    return getLayout(
+    return (
         <>
             <QueryClientProvider client={queryClient}>
                 <NextNProgress />
-                <Component {...pageProps} />
+                {getLayout(<Component {...pageProps} />)}
+                <ToastContainer />
             </QueryClientProvider>
         </>
     );

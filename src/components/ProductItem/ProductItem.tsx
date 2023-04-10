@@ -31,12 +31,12 @@ function ProductItem({ name, images, slug, original_price, price }: IProduct) {
                 <Image
                     alt="d"
                     className="image-product"
-                    src={images?.[0].base_url}
+                    src={images?.[0]?.url}
                     layout="responsive"
                     objectFit="cover"
                     priority={true}
                     width={200}
-                    height={100}
+                    height={200}
                 />
 
                 <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ color: "#ccc" }}>
@@ -61,12 +61,12 @@ function ProductItem({ name, images, slug, original_price, price }: IProduct) {
                     justifyContent="space-between"
                     sx={{ color: "#ff3a47", fontSize: "1.2rem" }}
                 >
-                    <Typography sx={{ fontSize: "1.4rem" }}>{price.toLocaleString()} Đ</Typography>
+                    <Typography sx={{ fontSize: "1.4rem" }}>{price?.toLocaleString()} Đ</Typography>
                     <Typography
                         component="span"
                         sx={{ color: "#df5656", fontSize: "1.2rem", textDecoration: "line-through" }}
                     >
-                        {original_price.toLocaleString()} đ
+                        {original_price?.toLocaleString()} đ
                     </Typography>
                 </Stack>
                 <Stack

@@ -15,7 +15,7 @@ import SwiperCore, { Pagination } from "swiper";
 import Image from "next/image";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { IProduct } from "@/types";
-import { getAllProducts, getProductBySlug } from "@/apis/products";
+import { getAllProducts, getProductBySlug, getProductsByCategoryId } from "@/apis/products";
 import Card from "@mui/material/Card";
 import Button from "@mui/material/Button";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
@@ -81,6 +81,7 @@ const slides = [
 ];
 interface PropsType {
     product: IProduct;
+    // products: IProduct[]
 }
 
 const config = {
@@ -92,6 +93,7 @@ const config = {
 function ProductDetail({ product }: PropsType) {
     const { name, images, price, original_price, description } = product;
     const [explore, setExplore] = useState<boolean>(false);
+
 
     return (
         <Box sx={{ maxWidth: "1200px", m: "0 auto" }}>
@@ -108,7 +110,7 @@ function ProductDetail({ product }: PropsType) {
                             clickable: true,
                             renderBullet: function (index, className) {
                                 if (index > 2) return `<div>hi</div>`;
-                                return `<div class="${className}"><img src="${images[index].base_url}" alt="${name}"/></div>`;
+                                return `<div class="${className}"><img src="${images[index].url}" alt="${name}"/></div>`;
                             },
                         }}
                     >
@@ -116,7 +118,7 @@ function ProductDetail({ product }: PropsType) {
                             <SwiperSlide key={index}>
                                 <Box sx={{ cursor: "pointer" }}>
                                     <Image
-                                        src={slide.base_url}
+                                        src={slide.url}
                                         alt={name}
                                         layout="responsive"
                                         objectFit="cover"
@@ -301,7 +303,7 @@ function ProductDetail({ product }: PropsType) {
                 <Typography component="h3" sx={{ fontSize: "2.4rem", mb: "1.2rem" }}>
                     Mô tả sản phẩm
                 </Typography>
-                <div dangerouslySetInnerHTML={{ __html: description }} className="product-description"></div>
+                <div dangerouslySetInnerHTML={{ __html: description }} className="product-description ql-editor"></div>
 
                 {!explore ? (
                     <Stack
@@ -364,9 +366,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
     const res = await getProductBySlug(params?.slug as string);
+    // const res2 = await getProductsByCategoryId(res.data.product.categoryId);
     return {
         props: {
             product: res.data.product,
+            // products: res.data.products
         },
     };
 };

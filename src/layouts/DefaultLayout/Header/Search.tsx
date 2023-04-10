@@ -1,3 +1,7 @@
+import { searchApi } from "@/apis/search";
+import { useDebounce } from "@/hooks";
+import { IProduct } from "@/types";
+import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import { ClickAwayListener, List, ListItem, Stack } from "@mui/material";
@@ -8,8 +12,8 @@ import Popper from "@mui/material/Popper";
 import TextField from "@mui/material/TextField";
 import { styled } from "@mui/system";
 import Link from "next/link";
-import React, { useRef, useState } from "react";
-import CloseIcon from "@mui/icons-material/Close";
+import { useEffect, useRef, useState } from "react";
+import { useQuery } from "react-query";
 
 const SearchInput = styled("div")({
     maxWidth: "750px",
@@ -64,6 +68,11 @@ function Search() {
 
     const [searchValue, setSearchValue] = useState<string>("");
 
+    const debounce = useDebounce(searchValue, 600);
+    const { data, isFetching, refetch } = useQuery("searchDb", async () => searchApi(debounce), {
+        enabled: debounce.length > 2,
+    });
+
     const handleClickAway = (): void => {
         setActiveResult(false);
     };
@@ -77,8 +86,9 @@ function Search() {
         setActiveResult(false);
     };
 
-    const loading = true;
-
+    useEffect(() => {
+        refetch();
+    }, [debounce, refetch]);
 
     return (
         <>
@@ -148,18 +158,18 @@ function Search() {
                             </>
                         )}
 
-                        {loading ? (
+                        {isFetching ? (
                             <>
                                 <Loading />
                                 Tìm {searchValue}
                             </>
                         ) : (
-                            <>Kết quả tìm {searchValue}</>
+                            <>{searchValue && <>Kết quả tìm {searchValue}</>}</>
                         )}
                     </Stack>
 
                     <List>
-                        <Link href="/cart">
+                        {/* <Link href="/cart">
                             <ListItem
                                 sx={{
                                     p: "0",
@@ -172,21 +182,24 @@ function Search() {
                                 <SearchIcon sx={{ mr: "6px", fontSize: "1.8rem" }} />
                                 áo phông oversize
                             </ListItem>
-                        </Link>
-                        <Link href="/">
-                            <ListItem
-                                sx={{
-                                    p: "0",
-                                    fontSize: "1.66rem",
-                                    fontWeight: "500",
-                                    mb: "6px",
-                                    color: "#374151",
-                                }}
-                            >
-                                <SearchIcon sx={{ mr: "6px", fontSize: "1.8rem" }} />
-                                áo phông oversize
-                            </ListItem>
-                        </Link>
+                        </Link> */}
+
+                        {data?.data?.products.map((product: IProduct) => (
+                            <Link href={`/${product.slug}`} key={product._id}>
+                                <ListItem
+                                    sx={{
+                                        p: "0",
+                                        fontSize: "1.66rem",
+                                        fontWeight: "500",
+                                        mb: "6px",
+                                        color: "#374151",
+                                    }}
+                                >
+                                    <SearchIcon sx={{ mr: "6px", fontSize: "1.8rem" }} />
+                                    {product.name}
+                                </ListItem>
+                            </Link>
+                        ))}
                     </List>
                 </Box>
             </Popper>
