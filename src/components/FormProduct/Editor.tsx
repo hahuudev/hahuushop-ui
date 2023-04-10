@@ -16,7 +16,7 @@ type Props = {
 const Editor = ({ setValue, watch }: Props) => {
     const modules = {
         toolbar: [
-            [{ font: [] }],
+            [{ font: fontSizes }],
             [{ header: [1, 2, false] }],
             ["bold", "italic", "underline", "strike", "blockquote"],
             [{ color: [] }, { background: [] }],
