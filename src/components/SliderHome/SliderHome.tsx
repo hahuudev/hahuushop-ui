@@ -37,7 +37,7 @@ function SliderHome() {
         <Swiper {...config}>
             {slides.map((slide) => (
                 <SwiperSlide key={slide.id} style={{ display: "flex" }}>
-                    <Image src={slide.image} alt={slide.title} layout="reponsive"/>
+                    <Image src={slide.image} alt={slide.title} layout="reponsive" width="12000" height="400"/>
                 </SwiperSlide>
             ))}
             <div className="swiper-button-prev"></div>
